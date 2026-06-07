@@ -56,6 +56,25 @@
     return { unal_minas: 'UNAL', jooble: 'Jooble', arbeitnow: 'Remoto' }[s] || s;
   }
 
+  // Filtros por TIPO de oportunidad (chips)
+  var FILTROS = [
+    { key: 'all', label: 'Todas' },
+    { key: 'practicas', label: 'Prácticas' },
+    { key: 'aprendiz', label: 'Aprendiz' },
+    { key: 'medio', label: 'Medio tiempo' },
+    { key: 'unal', label: 'UNAL' },
+  ];
+
+  function pasaFiltro(e, key) {
+    if (key === 'all') return true;
+    if (key === 'unal') return e.source === 'unal_minas';
+    var t = norm((e.title || '') + ' ' + (e.employment_type || ''));
+    if (key === 'practicas') return /practic|pasant/.test(t);
+    if (key === 'aprendiz') return /aprendiz/.test(t);
+    if (key === 'medio') return /medio tiempo|parcial|part.?time/.test(t);
+    return true;
+  }
+
   function itemHtml(e) {
     var tags = fuenteLabel(e.source);
     if (e.employment_type) tags += ' · ' + e.employment_type;
@@ -79,9 +98,10 @@
         '<div class="ee-controls">' +
           '<input class="ee-buscar" type="text" aria-label="Buscar" ' +
           'placeholder="Buscar cargo, empresa o palabra…">' +
-          '<button class="ee-chip activo" data-f="all">Todas</button>' +
-          '<button class="ee-chip" data-f="unal_minas">UNAL</button>' +
-          '<button class="ee-chip" data-f="jooble">Jooble</button>' +
+          FILTROS.map(function (f, i) {
+            return '<button class="ee-chip' + (i === 0 ? ' activo' : '') +
+              '" data-f="' + f.key + '">' + f.label + '</button>';
+          }).join('') +
         '</div>' +
         '<div class="ee-lista"></div>' +
       '</div>';
@@ -90,12 +110,12 @@
     var contador = el.querySelector('.ee-contador');
     var buscar = el.querySelector('.ee-buscar');
     var chips = el.querySelectorAll('.ee-chip');
-    var estado = { q: '', fuente: 'all' };
+    var estado = { q: '', filtro: 'all' };
 
     function aplicar() {
       var q = norm(estado.q);
       var res = empleos.filter(function (e) {
-        if (estado.fuente !== 'all' && e.source !== estado.fuente) return false;
+        if (!pasaFiltro(e, estado.filtro)) return false;
         if (!q) return true;
         return norm((e.title || '') + ' ' + (e.company || '') + ' ' +
           (e.location || '') + ' ' + (e.employment_type || '')).indexOf(q) !== -1;
@@ -109,7 +129,7 @@
     buscar.addEventListener('input', function () { estado.q = buscar.value; aplicar(); });
     Array.prototype.forEach.call(chips, function (c) {
       c.addEventListener('click', function () {
-        estado.fuente = c.getAttribute('data-f');
+        estado.filtro = c.getAttribute('data-f');
         Array.prototype.forEach.call(chips, function (x) { x.classList.remove('activo'); });
         c.classList.add('activo');
         aplicar();
