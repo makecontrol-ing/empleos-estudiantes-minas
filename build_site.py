@@ -66,7 +66,7 @@ def index_html(total: int, snippet: str) -> str:
 
 def main() -> None:
     recolectar()
-    empleos = db.get_jobs(solo_estudiantes=True, fuentes=config.FUENTES_EMBED, limite=80)
+    empleos = db.get_jobs(solo_estudiantes=True, fuentes=config.FUENTES_EMBED, limite=120)
     # Mostrar primero las convocatorias UNAL (contenido oficial), luego Jooble.
     prioridad = {"unal_minas": 0, "jooble": 1}
     empleos.sort(key=lambda e: prioridad.get(e.get("source"), 9))
