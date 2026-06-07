@@ -1,0 +1,17 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "plataforma-empleos",
+      "runtimeExecutable": "venv/Scripts/python.exe",
+      "runtimeArgs": ["-c", "from app import app; app.run(port=5000)"],
+      "port": 5000
+    },
+    {
+      "name": "sitio-docs",
+      "runtimeExecutable": "venv/Scripts/python.exe",
+      "runtimeArgs": ["-m", "http.server", "8000", "--directory", "docs"],
+      "port": 8000
+    }
+  ]
+}
