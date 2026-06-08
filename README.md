@@ -96,7 +96,7 @@ python app.py                 # tablero en http://127.0.0.1:5000
   GitHub Pages.
 - Requiere el secreto de Actions **`JOOBLE_API_KEY`**.
 
-## Integración con la página de Bienestar (Joomla)
+## Integración en(Joomla)
 
 Pegar en un artículo (modo código) o en un bloque HTML de SP Page Builder:
 
