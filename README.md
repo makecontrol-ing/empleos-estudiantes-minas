@@ -1,4 +1,4 @@
-# 🎓 Empleos para Estudiantes — Facultad de Minas (UNAL)
+#  Empleos para Estudiantes — Facultad de Minas (UNAL)
 
 Plataforma que reúne en un solo lugar las oportunidades laborales para estudiantes de la
 Facultad de Minas (Universidad Nacional de Colombia, sede Medellín): convocatorias de
