@@ -1,12 +1,3 @@
-"""Genera 'embed_estatico.html': un bloque HTML autónomo (SOLO estilos en línea,
-sin <script> ni <iframe>) para pegar en un artículo de Joomla.
-
-Usa la tipografía Ancízar (la hereda de la página UNAL) y la paleta del sitio
-(verde #b07d0a / lima #f2a900, enlaces azul #135cae). No se actualiza solo:
-vuelve a correr este script para refrescar.
-
-Uso:  python export_embed.py
-"""
 import sys
 from html import escape
 

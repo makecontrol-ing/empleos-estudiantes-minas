@@ -2,8 +2,8 @@ name: Actualizar empleos
 
 on:
   schedule:
-    - cron: "0 */6 * * *"   # cada 6 horas (UTC)
-  workflow_dispatch:          # correrlo a mano desde la pestaña Actions
+    - cron: "0 */6 * * *"
+  workflow_dispatch:
   push:
     branches: [ main ]
 
@@ -24,22 +24,17 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
-
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-
       - name: Instalar dependencias
         run: pip install -r requirements.txt
-
-      - name: Construir docs/
+      - name: Construir docs
         env:
           JOOBLE_API_KEY: ${{ secrets.JOOBLE_API_KEY }}
         run: python build_site.py
-
       - uses: actions/upload-pages-artifact@v3
         with:
           path: docs
-
       - id: deployment
         uses: actions/deploy-pages@v4

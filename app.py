@@ -1,9 +1,3 @@
-"""Interfaz web simple para ver las ofertas guardadas (Flask).
-
-Uso:
-    python app.py
-Luego abre en el navegador:  http://127.0.0.1:5000
-"""
 from flask import Flask, jsonify, redirect, render_template_string, request, url_for
 
 import config
@@ -11,6 +5,8 @@ import db
 from fetch import recolectar
 
 app = Flask(__name__)
+
+FUENTE_LABEL = {"unal_minas": "UNAL", "jooble": "Jooble", "arbeitnow": "Remoto"}
 
 PLANTILLA = """
 <!doctype html>
@@ -104,63 +100,6 @@ PLANTILLA = """
 </html>
 """
 
-
-@app.route("/")
-def index():
-    solo_est = request.args.get("todos") != "1"
-    buscar = request.args.get("q", "").strip()
-    fuente = request.args.get("fuente", "").strip()
-    empleos = db.get_jobs(solo_estudiantes=solo_est, buscar=buscar, fuente=fuente)
-    return render_template_string(
-        PLANTILLA,
-        empleos=empleos,
-        stats=db.stats(),
-        solo_est=solo_est,
-        buscar=buscar,
-        fuente=fuente,
-        ciudad=config.CIUDAD,
-        labels=FUENTE_LABEL,
-    )
-
-
-@app.route("/actualizar", methods=["POST"])
-def actualizar():
-    recolectar()
-    return redirect(url_for("index"))
-
-
-# ---- API y vistas para integrar en otras páginas (ej. Bienestar UNAL) ----
-
-@app.after_request
-def _cors(resp):
-    # Permite que el widget incrustado en otra web consuma la API.
-    if request.path.startswith("/api/"):
-        resp.headers["Access-Control-Allow-Origin"] = "*"
-    return resp
-
-
-def _leer_filtros():
-    solo_est = request.args.get("todos") != "1"
-    buscar = request.args.get("q", "").strip()
-    fuente = request.args.get("fuente", "").strip()
-    try:
-        limite = min(int(request.args.get("limite", 50)), 200)
-    except (TypeError, ValueError):
-        limite = 50
-    return solo_est, buscar, fuente, limite
-
-
-@app.route("/api/empleos")
-def api_empleos():
-    """Devuelve los empleos en JSON (lo consume el widget incrustado)."""
-    solo_est, buscar, fuente, limite = _leer_filtros()
-    empleos = db.get_jobs(solo_estudiantes=solo_est, buscar=buscar,
-                          fuente=fuente, fuentes=config.FUENTES_EMBED, limite=limite)
-    return jsonify({"total": len(empleos), "empleos": empleos})
-
-
-FUENTE_LABEL = {"unal_minas": "UNAL", "jooble": "Jooble", "arbeitnow": "Remoto"}
-
 EMBED_PLANTILLA = """
 <!doctype html>
 <html lang="es"><head><meta charset="utf-8">
@@ -193,9 +132,58 @@ EMBED_PLANTILLA = """
 """
 
 
+def _leer_filtros():
+    solo_est = request.args.get("todos") != "1"
+    buscar = request.args.get("q", "").strip()
+    fuente = request.args.get("fuente", "").strip()
+    try:
+        limite = min(int(request.args.get("limite", 50)), 200)
+    except (TypeError, ValueError):
+        limite = 50
+    return solo_est, buscar, fuente, limite
+
+
+@app.after_request
+def _cors(resp):
+    if request.path.startswith("/api/"):
+        resp.headers["Access-Control-Allow-Origin"] = "*"
+    return resp
+
+
+@app.route("/")
+def index():
+    solo_est = request.args.get("todos") != "1"
+    buscar = request.args.get("q", "").strip()
+    fuente = request.args.get("fuente", "").strip()
+    empleos = db.get_jobs(solo_estudiantes=solo_est, buscar=buscar, fuente=fuente)
+    return render_template_string(
+        PLANTILLA,
+        empleos=empleos,
+        stats=db.stats(),
+        solo_est=solo_est,
+        buscar=buscar,
+        fuente=fuente,
+        ciudad=config.CIUDAD,
+        labels=FUENTE_LABEL,
+    )
+
+
+@app.route("/actualizar", methods=["POST"])
+def actualizar():
+    recolectar()
+    return redirect(url_for("index"))
+
+
+@app.route("/api/empleos")
+def api_empleos():
+    solo_est, buscar, fuente, limite = _leer_filtros()
+    empleos = db.get_jobs(solo_estudiantes=solo_est, buscar=buscar,
+                          fuente=fuente, fuentes=config.FUENTES_EMBED, limite=limite)
+    return jsonify({"total": len(empleos), "empleos": empleos})
+
+
 @app.route("/embed")
 def embed():
-    """Página mínima sin menú, pensada para incrustar con <iframe>."""
     solo_est, buscar, fuente, limite = _leer_filtros()
     empleos = db.get_jobs(solo_estudiantes=solo_est, buscar=buscar,
                           fuente=fuente, fuentes=config.FUENTES_EMBED, limite=limite)

@@ -1,14 +1,3 @@
-"""Fuente UNAL — Facultad de Minas: convocatorias de Estudiante Auxiliar / monitorías.
-
-Lee la página pública de convocatorias estudiantiles de la sede Medellín
-(su robots.txt lo permite) y extrae las convocatorias de las dependencias
-configuradas (por defecto, MINAS).
-
-Estructura del sitio (Joomla):
-  1. Listado "Llamado a Convocatorias": una fila por dependencia/semestre;
-     cada una enlaza a una carpeta (action=Mostrarcarpeta&repo_id=...).
-  2. Dentro de la carpeta: una tabla con un PDF por convocatoria y su fecha.
-"""
 import re
 from html import unescape
 from urllib.parse import quote, urljoin
@@ -29,15 +18,13 @@ UA = {
 
 
 def _limpiar_titulo(nombre: str) -> str:
-    """Convierte 'Conv_Est_Aux_Pregrado_...pdf' en algo legible."""
     t = nombre.strip()
     if t.lower().endswith(".pdf"):
         t = t[:-4]
     t = re.sub(r"\s+", " ", t.replace("_", " ")).strip()
     t = re.sub(r"\bConv\b", "Convocatoria", t)
-    # "Est Aux", "Estud Aux", "Estud Auxiliar", "Est. Auxiliar" -> "Estudiante Auxiliar"
     t = re.sub(r"\bEst(?:ud(?:iante)?)?\.? Aux(?:iliar)?\b", "Estudiante Auxiliar", t)
-    t = re.sub(r"\s+\d+$", "", t)  # quita el número de convocatoria al final
+    t = re.sub(r"\s+\d+$", "", t)
     return t
 
 
@@ -54,7 +41,6 @@ class UnalMinasConnector(Connector):
         return r.text
 
     def _carpetas(self) -> list[tuple[str, str]]:
-        """Devuelve [(unidad, folder_url)] de las dependencias configuradas."""
         soup = BeautifulSoup(self._get(LISTADO), "html.parser")
         filtro = {u.upper() for u in config.UNAL_UNIDADES} if config.UNAL_UNIDADES else None
         carpetas = []

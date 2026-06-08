@@ -1,12 +1,3 @@
-/* Widget de empleos para estudiantes — Bienestar, Facultad de Minas (UNAL).
- * Incrustar con:
- *   <div class="empleos-estudiantes"></div>
- *   <script src="https://makecontrol-ing.github.io/empleos-estudiantes-minas/widget.js" defer></script>
- *
- * Lee 'empleos.json' (junto a este script) y, si no lo encuentra, intenta la
- * API Flask local (/api/empleos). Incluye buscador y filtros (todo en el cliente).
- * Hereda la tipografía Ancízar de la página y combina con sus colores.
- */
 (function () {
   var self = document.currentScript ||
              document.querySelector('script[src*="widget.js"]');
@@ -48,7 +39,6 @@
 
   var DIACRITICOS = new RegExp('[\\u0300-\\u036f]', 'g');
   function norm(s) {
-    // minúsculas e ignora acentos (á -> a) para buscar mejor en español
     return String(s == null ? '' : s).toLowerCase().normalize('NFD').replace(DIACRITICOS, '');
   }
 
@@ -56,7 +46,6 @@
     return { unal_minas: 'UNAL', jooble: 'Jooble', arbeitnow: 'Remoto' }[s] || s;
   }
 
-  // Filtros por TIPO de oportunidad (chips)
   var FILTROS = [
     { key: 'all', label: 'Todas' },
     { key: 'practicas', label: 'Prácticas' },

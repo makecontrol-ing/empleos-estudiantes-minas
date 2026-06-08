@@ -1,12 +1,3 @@
-"""Fuente Jooble: API REST gratuita que cubre Colombia.
-
-Cómo activarla:
-  1. Regístrate gratis en https://jooble.org/api/about
-  2. Copia tu key en el archivo  .env  ->  JOOBLE_API_KEY=tu_key_aqui
-
-Hace una búsqueda por cada término de config.BUSQUEDAS_ESTUDIANTE en la ciudad
-configurada (config.CIUDAD) y junta los resultados sin duplicados.
-"""
 import os
 
 import requests

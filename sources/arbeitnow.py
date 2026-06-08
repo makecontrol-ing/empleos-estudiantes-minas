@@ -1,8 +1,3 @@
-"""Fuente Arbeitnow: API gratuita y SIN API key (empleos remotos / Europa).
-
-Sirve para ver el sistema funcionando de inmediato, sin registrarte en nada.
-Documentación: https://www.arbeitnow.com/blog/job-board-api
-"""
 import requests
 
 from models import Job

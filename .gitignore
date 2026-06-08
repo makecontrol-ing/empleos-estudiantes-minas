@@ -1,13 +1,6 @@
-# Entorno virtual
 venv/
 __pycache__/
 *.pyc
-
-# Secretos (¡nunca subir la API key!)
 .env
-
-# Base de datos local
 *.db
-
-# Presentaciones / binarios (se quedan en local, no en el repo)
 *.pptx

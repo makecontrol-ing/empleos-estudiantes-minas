@@ -1,28 +1,20 @@
-"""Recolecta ofertas de todas las fuentes activas, marca las aptas para
-estudiantes y las guarda en la base de datos.
-
-Uso:
-    python fetch.py
-"""
 import sys
 
 from dotenv import load_dotenv
 
 import config
 import db
-
-# La consola de Windows usa cp1252 por defecto y no imprime símbolos como "→".
-# Forzamos UTF-8 para que los mensajes salgan bien.
-try:
-    sys.stdout.reconfigure(encoding="utf-8")
-except Exception:
-    pass
 from sources.arbeitnow import ArbeitnowConnector
 from sources.jooble import JoobleConnector
 from sources.unal_minas import UnalMinasConnector
 from student_filter import es_para_estudiante
 
-load_dotenv()  # carga JOOBLE_API_KEY desde el archivo .env si existe
+try:
+    sys.stdout.reconfigure(encoding="utf-8")
+except Exception:
+    pass
+
+load_dotenv()
 
 CONECTORES = {
     "arbeitnow": ArbeitnowConnector,
@@ -43,7 +35,7 @@ def recolectar() -> None:
         print(f"→ Consultando fuente: {conector.name}")
         try:
             ofertas = conector.fetch()
-        except Exception as e:  # una fuente caída no debe tumbar el resto
+        except Exception as e:
             print(f"  [{conector.name}] Falló: {e}")
             continue
 

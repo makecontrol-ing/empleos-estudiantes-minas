@@ -1,9 +1,3 @@
-"""Almacenamiento en SQLite (incluido en Python, sin instalar nada).
-
-Guarda las ofertas evitando duplicados y permite consultarlas con filtros
-sencillos. Para crecer, esto se puede migrar a PostgreSQL sin cambiar el
-resto del código (solo este archivo).
-"""
 import sqlite3
 from contextlib import contextmanager
 from typing import Iterable
@@ -46,7 +40,6 @@ def init_db() -> None:
 
 
 def upsert_jobs(jobs: Iterable[Job]) -> int:
-    """Inserta ofertas evitando duplicados (por id). Devuelve cuántas nuevas se agregaron."""
     nuevas = 0
     with _connect() as conn:
         for job in jobs:

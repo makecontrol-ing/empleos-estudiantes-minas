@@ -1,15 +1,3 @@
-"""Construye la carpeta docs/ para publicar en GitHub Pages:
-
-  - empleos.json : datos curados (UNAL + Jooble Medellín) que lee el widget
-  - widget.js    : copia del widget
-  - index.html   : vista previa + el snippet para pegar en Joomla
-  - .nojekyll    : evita el procesamiento Jekyll de GitHub Pages
-
-Recolecta datos frescos (corre fetch) y luego escribe la carpeta. En GitHub
-Actions, la API key de Jooble se toma del secreto JOOBLE_API_KEY.
-
-Uso local:  python build_site.py
-"""
 import json
 import os
 import shutil
@@ -35,7 +23,7 @@ DOCS = Path("docs")
 
 
 def pages_url() -> str:
-    repo = os.getenv("GITHUB_REPOSITORY", "")  # "owner/repo" dentro de Actions
+    repo = os.getenv("GITHUB_REPOSITORY", "")
     if "/" in repo:
         owner, name = repo.split("/", 1)
         return f"https://{owner}.github.io/{name}/"
@@ -67,7 +55,6 @@ def index_html(total: int, snippet: str) -> str:
 def main() -> None:
     recolectar()
     empleos = db.get_jobs(solo_estudiantes=True, fuentes=config.FUENTES_EMBED, limite=120)
-    # Mostrar primero las convocatorias UNAL (contenido oficial), luego Jooble.
     prioridad = {"unal_minas": 0, "jooble": 1}
     empleos.sort(key=lambda e: prioridad.get(e.get("source"), 9))
 
