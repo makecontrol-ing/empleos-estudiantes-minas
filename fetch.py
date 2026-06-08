@@ -32,7 +32,7 @@ def recolectar() -> None:
     nuevas = 0
 
     for conector in activos:
-        print(f"→ Consultando fuente: {conector.name}")
+        print(f"Consultando fuente: {conector.name}")
         try:
             ofertas = conector.fetch()
         except Exception as e:

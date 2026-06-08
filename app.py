@@ -46,7 +46,7 @@ PLANTILLA = """
 </head>
 <body>
 <header>
-  <h1>🎓 Empleos para estudiantes — {{ ciudad }}</h1>
+  <h1>Empleos para estudiantes — {{ ciudad }}</h1>
   <p>Prácticas, contrato de aprendizaje SENA, medio tiempo y primer empleo.</p>
 </header>
 <div class="wrap">
@@ -71,7 +71,7 @@ PLANTILLA = """
     {% endif %}
     · base: {{ stats.estudiantes }} para estudiantes / {{ stats.total }} totales
     <form method="post" action="/actualizar" style="display:inline; margin-left:8px;">
-      <button class="sec" type="submit">🔄 Actualizar ahora</button>
+      <button class="sec" type="submit">Actualizar ahora</button>
     </form>
   </div>
 
@@ -84,14 +84,14 @@ PLANTILLA = """
       <div>
         <span class="badge">{{ labels.get(e.source, e.source) }}</span>
         {% if e.employment_type %}<span class="badge">{{ e.employment_type }}</span>{% endif %}
-        {% if e.salary %}<span class="badge">💲 {{ e.salary }}</span>{% endif %}
+        {% if e.salary %}<span class="badge">{{ e.salary }}</span>{% endif %}
       </div>
       {% if e.description %}<p class="desc">{{ e.description|striptags|truncate(220) }}</p>{% endif %}
     </div>
   {% else %}
     <div class="vacio">
       <p>No hay ofertas todavía.</p>
-      <p>Pulsa <b>🔄 Actualizar ahora</b> o corre <code>python fetch.py</code> en la terminal.</p>
+      <p>Pulsa <b>Actualizar ahora</b> o corre <code>python fetch.py</code> en la terminal.</p>
     </div>
   {% endfor %}
 

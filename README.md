@@ -6,7 +6,7 @@ Facultad de Minas (Universidad Nacional de Colombia, sede Medellín): convocator
 y empleos de medio tiempo** en Medellín. Se actualiza sola y se muestra dentro de la página
 de Bienestar.
 
-**🔗 En vivo:** https://makecontrol-ing.github.io/empleos-estudiantes-minas/
+**En vivo:** https://makecontrol-ing.github.io/empleos-estudiantes-minas/
 
 ---
 
