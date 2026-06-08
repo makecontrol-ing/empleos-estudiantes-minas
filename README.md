@@ -133,4 +133,4 @@ requirements.txt
 Facultad de Minas (UNAL).
 
 - LinkedIn: https://linkedin.com/in/andres-david-galeano-quintero-9b9177301
-- Correo: andresdgqceo@gmail.com
+- Correo: angaleanoq@unal.edu.co
